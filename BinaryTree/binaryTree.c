@@ -17,33 +17,40 @@ struct Node* ascendPosPar(struct Node* toAdd, struct Node* start);
 
 void inorderPrint(struct Node* root);
 
+struct Node* find(float toFind, struct Node* root);
+
 int main() {
 	struct Node* root = NULL;
 	struct Node n1;
-	initn(9, &n1);
+	initN(8, &n1);
 	
 	struct Node n2;
-	initn(10, &n2);
+	initN(10, &n2);
 
 	struct Node n3;
-	initn(9, &n3);
+	initN(9, &n3);
 
-	ascendadd(&n1, &root);
-	ascendadd(&n2, &root);
-	ascendadd(&n3, &root);
+	ascendAdd(&n1, &root);
+	ascendAdd(&n2, &root);
+	ascendAdd(&n3, &root);
 
-	inorderprint(root);
+	struct Node* found1 = find(8, root);
+	struct Node* found2 = find(10, root);
+	struct Node* found3 = find(9, root);
+	return 0;
 }
 
 void printActions() {
 	system("cls");
 	printf("Possible actions: \n1 - Add item\n2 - Delete item\n3 - Find item\n4 - Edit item\n5 - Show all items from beginning\n6 - Show all items from end\n0 - Exit\n");
+	return;
 }
 
 void initN(float num, struct Node* n) {
 	n->num = num;
 	n->left = NULL;
 	n->right = NULL;
+	return;
 }
 
 void ascendAdd(struct Node* toAdd, struct Node** root) {
@@ -60,6 +67,7 @@ void ascendAdd(struct Node* toAdd, struct Node** root) {
 			parent->right = toAdd;
 		}
 	}
+	return;
 }
 
 struct Node* ascendPosPar(struct Node* toAdd, struct Node* start) {
@@ -87,4 +95,22 @@ void inorderPrint(struct Node* root) {
 	inorderPrint(root->left);
 	printf("%.4f ", root->num);
 	inorderPrint(root->right);
+	return;
+}
+
+struct Node* find(float toFind, struct Node* root) {
+	if ((!root)||(root->num == toFind)) {
+		return root;
+	}
+
+	struct Node* found = NULL;
+	found = find(toFind, root->left);
+	if (!found) {
+		found = find(toFind, root->right);
+	}
+	return found;
+}
+
+int delete(struct Node* toDel, struct Node** root) {
+
 }
