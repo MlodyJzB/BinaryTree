@@ -25,18 +25,19 @@ int main() {
 	initN(8, &n1);
 	
 	struct Node n2;
-	initN(10, &n2);
+	initN(9, &n2);
 
 	struct Node n3;
-	initN(9, &n3);
+	initN(10, &n3);
 
 	ascendAdd(&n1, &root);
 	ascendAdd(&n2, &root);
 	ascendAdd(&n3, &root);
 
 	struct Node* found1 = find(8, root);
-	struct Node* found2 = find(10, root);
-	struct Node* found3 = find(9, root);
+	struct Node* found2 = find(9, root);
+	struct Node* found3 = find(10, root);
+	delete(&found2, &root);
 	return 0;
 }
 
@@ -109,8 +110,4 @@ struct Node* find(float toFind, struct Node* root) {
 		found = find(toFind, root->right);
 	}
 	return found;
-}
-
-int delete(struct Node* toDel, struct Node** root) {
-
 }
