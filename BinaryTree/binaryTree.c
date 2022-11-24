@@ -10,7 +10,7 @@ void printActions();
 
 void ascendAdd(struct Node* newN, struct Node** root);
 
-struct Node* propPosPar(struct Node* toAdd, struct Node* start);
+struct Node* ascendPosPar(struct Node* toAdd, struct Node* start);
 
 int main() {
 
@@ -26,7 +26,7 @@ void ascendAdd(struct Node* toAdd, struct Node** root) {
 		*root = toAdd;
 	}
 	else {
-		struct Node* parent = propPosPar(toAdd, *root);
+		struct Node* parent = ascendPosPar(toAdd, *root);
 
 		if (toAdd->num <= parent->num) {
 			parent->left = toAdd;
@@ -37,7 +37,7 @@ void ascendAdd(struct Node* toAdd, struct Node** root) {
 	}
 }
 
-struct Node* propPosPar(struct Node* toAdd, struct Node* start) {
+struct Node* ascendPosPar(struct Node* toAdd, struct Node* start) {
 	struct Node* cur = start;
 	struct Node* prevCur = start;
 
