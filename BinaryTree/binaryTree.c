@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 struct Node {
 	float num;
@@ -14,20 +15,24 @@ void ascendAdd(struct Node* toAdd, struct Node** root);
 
 struct Node* ascendPosPar(struct Node* toAdd, struct Node* start);
 
+void inorderPrint(struct Node* root);
+
 int main() {
 	struct Node* root = NULL;
 	struct Node n1;
-	n1.num = 10;
+	initn(9, &n1);
 	
 	struct Node n2;
-	n2.num = 9;
+	initn(10, &n2);
 
 	struct Node n3;
-	n3.num = 11;
+	initn(9, &n3);
 
-	ascendAdd(&n1, &root);
-	ascendAdd(&n2, &root);
-	ascendAdd(&n3, &root);
+	ascendadd(&n1, &root);
+	ascendadd(&n2, &root);
+	ascendadd(&n3, &root);
+
+	inorderprint(root);
 }
 
 void printActions() {
@@ -72,4 +77,14 @@ struct Node* ascendPosPar(struct Node* toAdd, struct Node* start) {
 	}
 
 	return prevCur;
+}
+
+void inorderPrint(struct Node* root) {
+	if (!root) {
+		return;
+	}
+
+	inorderPrint(root->left);
+	printf("%.4f ", root->num);
+	inorderPrint(root->right);
 }
