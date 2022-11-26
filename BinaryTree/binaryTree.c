@@ -150,7 +150,7 @@ void keepOrder(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) 
 			rep->left = toDelP->left;
 		}
 		if ((!rep->right) && (toDelP->right != rep)) {
-			rep->left = toDelP->left;
+			rep->right = toDelP->right;
 		}
 	}
 
