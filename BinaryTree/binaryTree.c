@@ -63,6 +63,7 @@ int main() {
 			if (foundP) {
 				delete(foundP, foundParP, &rootP);
 				foundP = NULL;
+				foundParP = NULL;
 			}
 			else {
 				printf("\nProvide float to delete!\n");
@@ -124,6 +125,7 @@ void printActions() {
 }
 
 void initN(float num, struct Node* nP) {
+	// init new node with a given value
 	nP->num = num;
 	nP->left = NULL;
 	nP->right = NULL;
@@ -131,6 +133,7 @@ void initN(float num, struct Node* nP) {
 }
 
 void ascendAdd(struct Node* toAddP, struct Node** rootPP) {
+	// add new node to the tree; keep ascending order
 	if (!(*rootPP)) {
 		*rootPP = toAddP;
 	}
@@ -148,6 +151,7 @@ void ascendAdd(struct Node* toAddP, struct Node** rootPP) {
 }
 
 struct Node* ascendPosPar(struct Node* toAddP, struct Node* startP) {
+	// give parent for a new node according to ascending order
 	struct Node* curP = startP;
 	struct Node* prevCurP = startP;
 
@@ -176,6 +180,7 @@ void inorderPrint(struct Node* rootP) {
 }
 
 struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) {
+	// find fisrt node with given float value; inorder search
 	if ((!rootP)||(rootP->num == toFind)) {
 		return rootP;
 	}
@@ -194,6 +199,7 @@ struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) 
 }
 
 void delete(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
+	// delete given node
 	keepOrder(toDelP, parentP, rootPP);
 	free(toDelP);
 
@@ -201,6 +207,7 @@ void delete(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
 }
 
 void keepOrder(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
+	// place other node to deleted node position with keeping ascending order
 	struct Node* repParentP;
 	struct Node* repP = findRep(toDelP, &repParentP);
 
