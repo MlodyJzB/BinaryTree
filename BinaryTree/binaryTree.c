@@ -17,27 +17,29 @@ struct Node* ascendPosPar(struct Node* toAdd, struct Node* start);
 
 void inorderPrint(struct Node* root);
 
-struct Node* find(float toFind, struct Node* root);
+struct Node* find(float toFind, struct Node** parentDest, struct Node* root);
+
+void delete(struct Node** toDel, struct Node** root);
 
 int main() {
 	struct Node* root = NULL;
-	struct Node n1;
-	initN(8, &n1);
+	struct Node* parent = NULL;
+
+	struct Node* n1 = (struct Node*)malloc(sizeof(struct Node));
+	initN(8, n1);
 	
-	struct Node n2;
-	initN(9, &n2);
+	struct Node* n2 = (struct Node*)malloc(sizeof(struct Node));
+	initN(9, n2);
 
-	struct Node n3;
-	initN(10, &n3);
+	struct Node *n3 = (struct Node*)malloc(sizeof(struct Node));
+	initN(10, n3);
 
-	ascendAdd(&n1, &root);
-	ascendAdd(&n2, &root);
-	ascendAdd(&n3, &root);
+	ascendAdd(n1, &root);
+	ascendAdd(n2, &root);
+	ascendAdd(n3, &root);
 
-	struct Node* found1 = find(8, root);
-	struct Node* found2 = find(9, root);
-	struct Node* found3 = find(10, root);
-	delete(&found2, &root);
+	
+	struct Node* found3 = find(11, &parent, root);
 	return 0;
 }
 
@@ -99,15 +101,22 @@ void inorderPrint(struct Node* root) {
 	return;
 }
 
-struct Node* find(float toFind, struct Node* root) {
+struct Node* find(float toFind, struct Node** parentDest, struct Node* root) {
 	if ((!root)||(root->num == toFind)) {
 		return root;
 	}
+	else {
+		*parentDest = root;
+	}
 
 	struct Node* found = NULL;
-	found = find(toFind, root->left);
+	found = find(toFind, parentDest, root->left);
 	if (!found) {
-		found = find(toFind, root->right);
+		found = find(toFind, parentDest, root->right);
 	}
 	return found;
+}
+
+void delete(struct Node* toDel, struct Node* parent, struct Node** root) {
+	free(toDel);
 }
