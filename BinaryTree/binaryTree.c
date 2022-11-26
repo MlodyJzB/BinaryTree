@@ -21,15 +21,19 @@ struct Node* find(float toFind, struct Node** parentDest, struct Node* root);
 
 void delete(struct Node** toDel, struct Node** root);
 
+void keepOrder(struct Node* toRep, struct Node* parent, struct Node** root);
+
+struct Node* findRep(struct Node* toReplace, struct Node** repParentDest);
+
 int main() {
 	struct Node* root = NULL;
 	struct Node* parent = NULL;
 
 	struct Node* n1 = (struct Node*)malloc(sizeof(struct Node));
-	initN(8, n1);
+	initN(9, n1);
 	
 	struct Node* n2 = (struct Node*)malloc(sizeof(struct Node));
-	initN(9, n2);
+	initN(8, n2);
 
 	struct Node *n3 = (struct Node*)malloc(sizeof(struct Node));
 	initN(10, n3);
@@ -39,7 +43,8 @@ int main() {
 	ascendAdd(n3, &root);
 
 	
-	struct Node* found3 = find(11, &parent, root);
+	struct Node* found3 = find(8, &parent, root);
+	delete(found3, parent, &root);
 	return 0;
 }
 
@@ -114,9 +119,72 @@ struct Node* find(float toFind, struct Node** parentDest, struct Node* root) {
 	if (!found) {
 		found = find(toFind, parentDest, root->right);
 	}
+
 	return found;
 }
 
 void delete(struct Node* toDel, struct Node* parent, struct Node** root) {
+	keepOrder(toDel, parent, root);
 	free(toDel);
+
+	return;
+}
+
+void keepOrder(struct Node* toDel, struct Node* parent, struct Node** root) {
+	struct Node* repParent;
+	struct Node* rep = findRep(toDel, &repParent);
+
+	repParent->left = NULL;
+
+	if (!parent) {
+		*root = rep;
+	}
+	else if (parent->left == toDel) {
+		parent->left = rep;
+	}
+	else {
+		parent->right = rep;
+	}
+
+	return;
+}
+
+//struct Node* findRep(struct Node* toReplace, struct Node** repParentDest) {
+//	 // search for the replacement of the deleted node to mantain order
+//	
+//	struct Node* replacement;
+//	struct Node* parent;
+//	
+//	if ((toReplace->right) && (toReplace->left)) {
+//
+//	}
+//	else if ((toReplace->right) && !(toReplace->left)) {
+//		replacement = toReplace->right;
+//		parent = toReplace;
+//	}
+//	else if (!(toReplace->right) && (toReplace->left)) {
+//		replacement = toReplace->left;
+//		parent = toReplace;
+//	}
+//}
+
+struct Node* findRep(struct Node* toReplace, struct Node** repParentDest) {
+	// search for the replacement of the deleted node to ma2intain order
+	
+	struct Node* replacement;
+	struct Node* parent = toReplace;
+
+	if (!toReplace->right) {
+		replacement = toReplace->left;
+	}
+	else {
+		replacement = toReplace->right;
+		while(replacement->left) {
+			parent = replacement;
+			replacement = replacement->left;
+		}
+	}
+	*repParentDest = parent;
+
+	return replacement;
 }
