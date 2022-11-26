@@ -48,22 +48,38 @@ int main() {
 
 		switch (state) {
 		case ADD: {
-			float f;
+			float num;
 			printf("Provide float to add: ");
-			scanf_s("%f", &f);
+			scanf_s("%f", &num);
 
 			struct Node* toAddP = (struct Node*)malloc(sizeof(struct Node));
-			initN(f, toAddP);
+			initN(num, toAddP);
 
 			ascendAdd(toAddP, &rootP);
 			break;
 		}
 
 		case DEL: {
+			if (foundP) {
+				delete(foundP, foundParP, &rootP);
+				foundP = NULL;
+			}
+			else {
+				printf("\nProvide float to delete!\n");
+				_getch();
+			}
 			break;
 		}
 
 		case FIND: {
+			float num;
+			printf("Provide float to find: ");
+			scanf_s("%f", &num);
+			foundP = find(num, &foundParP, rootP);
+			if (!foundP) {
+				printf("\nFloat not found!\n");
+				_getch();
+			}
 			break;
 		}
 
@@ -81,6 +97,7 @@ int main() {
 
 		default: {
 			printf("Incorrect action!\n");
+			_getch();
 		}
 
 		}
