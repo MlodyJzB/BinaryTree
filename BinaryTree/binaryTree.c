@@ -123,7 +123,7 @@ struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) 
 }
 
 void delete(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
-	keepOrder(toDelP, parentPP, rootPP);
+	keepOrder(toDelP, parentP, rootPP);
 	free(toDelP);
 
 	return;
