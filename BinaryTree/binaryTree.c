@@ -66,8 +66,11 @@ int main() {
 	ascendAdd(n8, &rootP);
 	ascendAdd(n9, &rootP);
 
+	inorderPrint(rootP);
+	printf("\n");
 	struct Node* found3 = find(5, &parentP, rootP);
 	delete(found3, parentP, &rootP);
+	inorderPrint(rootP);
 	return 0;
 }
 
@@ -102,20 +105,20 @@ void ascendAdd(struct Node* toAddP, struct Node** rootPP) {
 }
 
 struct Node* ascendPosPar(struct Node* toAddP, struct Node* startP) {
-	struct Node* cur = startP;
-	struct Node* prevCur = startP;
+	struct Node* curP = startP;
+	struct Node* prevCurP = startP;
 
-	while (cur) {
-		prevCur = cur;
-		if (toAddP->num <= cur->num) {
-			cur = cur->left;
+	while (curP) {
+		prevCurP = curP;
+		if (toAddP->num <= curP->num) {
+			curP = curP->left;
 		}
 		else {
-			cur = cur->right;
+			curP = curP->right;
 		}
 	}
 
-	return prevCur;
+	return prevCurP;
 }
 
 void inorderPrint(struct Node* rootP) {
@@ -137,14 +140,14 @@ struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) 
 		*parentDestPP = rootP;
 	}
 
-	struct Node* found = NULL;
-	found = find(toFind, parentDestPP, rootP->left);
-	if (!found) {
+	struct Node* foundP = NULL;
+	foundP = find(toFind, parentDestPP, rootP->left);
+	if (!foundP) {
 		*parentDestPP = rootP;
-		found = find(toFind, parentDestPP, rootP->right);
+		foundP = find(toFind, parentDestPP, rootP->right);
 	}
 
-	return found;
+	return foundP;
 }
 
 void delete(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
@@ -155,27 +158,27 @@ void delete(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
 }
 
 void keepOrder(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
-	struct Node* repParent;
-	struct Node* rep = findRep(toDelP, &repParent);
+	struct Node* repParentP;
+	struct Node* repP = findRep(toDelP, &repParentP);
 
-	repParent->left = NULL;
+	repParentP->left = NULL;
 
 	if (!parentP) {
-		*rootPP = rep;
+		*rootPP = repP;
 	}
 	else if (parentP->left == toDelP) {
-		parentP->left = rep;
+		parentP->left = repP;
 	}
 	else {
-		parentP->right = rep;
+		parentP->right = repP;
 	}
 
-	if (rep) {
-		if ((!rep->left) && (toDelP->left != rep)) {
-			rep->left = toDelP->left;
+	if (repP) {
+		if ((!repP->left) && (toDelP->left != repP)) {
+			repP->left = toDelP->left;
 		}
-		if ((!rep->right) && (toDelP->right != rep)) {
-			rep->right = toDelP->right;
+		if ((!repP->right) && (toDelP->right != repP)) {
+			repP->right = toDelP->right;
 		}
 	}
 
@@ -185,25 +188,25 @@ void keepOrder(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) 
 struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 	 // search for the replacement of the deleted node to mantain order
 	
-	struct Node* replacement = NULL;
-	struct Node* parent = toReplaceP;
+	struct Node* replacementP = NULL;
+	struct Node* parentP = toReplaceP;
 	
 	if ((toReplaceP->right) && (toReplaceP->left)) {
-		replacement = toReplaceP->right;
-		while (replacement->left) {
-			parent = replacement;
-			replacement = replacement->left;
+		replacementP = toReplaceP->right;
+		while (replacementP->left) {
+			parentP = replacementP;
+			replacementP = replacementP->left;
 		}
 	}
 	else if ((toReplaceP->right) && !(toReplaceP->left)) {
-		replacement = toReplaceP->right;
-		parent = toReplaceP;
+		replacementP = toReplaceP->right;
+		parentP = toReplaceP;
 	}
 	else if (!(toReplaceP->right) && (toReplaceP->left)) {
-		replacement = toReplaceP->left;
-		parent = toReplaceP;
+		replacementP = toReplaceP->left;
+		parentP = toReplaceP;
 	}
-	*repParentDestPP = parent;
+	*repParentDestPP = parentP;
 
-	return replacement;
+	return replacementP;
 }
