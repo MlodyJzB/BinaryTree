@@ -30,19 +30,43 @@ int main() {
 	struct Node* parentP = NULL;
 
 	struct Node* n1 = (struct Node*)malloc(sizeof(struct Node));
-	initN(9, n1);
+	initN(4, n1);
 	
 	struct Node* n2 = (struct Node*)malloc(sizeof(struct Node));
-	initN(8, n2);
+	initN(5, n2);
 
 	struct Node *n3 = (struct Node*)malloc(sizeof(struct Node));
-	initN(10, n3);
+	initN(7, n3);
+
+	struct Node* n4 = (struct Node*)malloc(sizeof(struct Node));
+	initN(3.5, n4);
+
+	struct Node* n5 = (struct Node*)malloc(sizeof(struct Node));
+	initN(4.5, n5);
+
+	struct Node* n6 = (struct Node*)malloc(sizeof(struct Node));
+	initN(6, n6);
+
+	struct Node* n7 = (struct Node*)malloc(sizeof(struct Node));
+	initN(8, n7);
+
+	struct Node* n8 = (struct Node*)malloc(sizeof(struct Node));
+	initN(4.2, n8);
+
+	struct Node* n9 = (struct Node*)malloc(sizeof(struct Node));
+	initN(4.6, n9);
 
 	ascendAdd(n1, &rootP);
 	ascendAdd(n2, &rootP);
 	ascendAdd(n3, &rootP);
+	ascendAdd(n4, &rootP);
+	ascendAdd(n5, &rootP);
+	ascendAdd(n6, &rootP);
+	ascendAdd(n7, &rootP);
+	ascendAdd(n8, &rootP);
+	ascendAdd(n9, &rootP);
 
-	struct Node* found3 = find(8, &parentP, rootP);
+	struct Node* found3 = find(5, &parentP, rootP);
 	delete(found3, parentP, &rootP);
 	return 0;
 }
@@ -116,6 +140,7 @@ struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) 
 	struct Node* found = NULL;
 	found = find(toFind, parentDestPP, rootP->left);
 	if (!found) {
+		*parentDestPP = rootP;
 		found = find(toFind, parentDestPP, rootP->right);
 	}
 
