@@ -1,11 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
+
+// defines for actions
+#define ADD 1
+#define DEL 2
+#define FIND 3
+#define DISP 4
+#define EXIT 0
 
 struct Node {
 	float num;
 	struct Node* left;
 	struct Node* right;
 };
+
+int getState();
 
 void printActions();
 
@@ -27,56 +37,72 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP);
 
 int main() {
 	struct Node* rootP = NULL;
-	struct Node* parentP = NULL;
-
-	struct Node* n1 = (struct Node*)malloc(sizeof(struct Node));
-	initN(4, n1);
+	struct Node* foundP = NULL;
+	struct Node* foundParP = NULL;
 	
-	struct Node* n2 = (struct Node*)malloc(sizeof(struct Node));
-	initN(5, n2);
+	while (1) {
+		printActions();
+		printf("\nChoose action: ");
 
-	struct Node *n3 = (struct Node*)malloc(sizeof(struct Node));
-	initN(7, n3);
+		int state = getState();
 
-	struct Node* n4 = (struct Node*)malloc(sizeof(struct Node));
-	initN(3.5, n4);
+		switch (state) {
+		case ADD: {
+			float f;
+			printf("Provide float to add: ");
+			scanf_s("%f", &f);
 
-	struct Node* n5 = (struct Node*)malloc(sizeof(struct Node));
-	initN(4.5, n5);
+			struct Node* toAddP = (struct Node*)malloc(sizeof(struct Node));
+			initN(f, toAddP);
 
-	struct Node* n6 = (struct Node*)malloc(sizeof(struct Node));
-	initN(6, n6);
+			ascendAdd(toAddP, &rootP);
+			break;
+		}
 
-	struct Node* n7 = (struct Node*)malloc(sizeof(struct Node));
-	initN(8, n7);
+		case DEL: {
+			break;
+		}
 
-	struct Node* n8 = (struct Node*)malloc(sizeof(struct Node));
-	initN(4.2, n8);
+		case FIND: {
+			break;
+		}
 
-	struct Node* n9 = (struct Node*)malloc(sizeof(struct Node));
-	initN(4.6, n9);
+		case DISP: {
+			inorderPrint(rootP);
+			printf("\n");
+			_getch();
+			break;
+		}
 
-	ascendAdd(n1, &rootP);
-	ascendAdd(n2, &rootP);
-	ascendAdd(n3, &rootP);
-	ascendAdd(n4, &rootP);
-	ascendAdd(n5, &rootP);
-	ascendAdd(n6, &rootP);
-	ascendAdd(n7, &rootP);
-	ascendAdd(n8, &rootP);
-	ascendAdd(n9, &rootP);
+		case EXIT: {
+			return 0;
+			break;
+		}
 
-	inorderPrint(rootP);
-	printf("\n");
-	struct Node* found3 = find(5, &parentP, rootP);
-	delete(found3, parentP, &rootP);
-	inorderPrint(rootP);
-	return 0;
+		default: {
+			printf("Incorrect action!\n");
+		}
+
+		}
+
+		system("cls");
+	}
+}
+
+int getState() {
+	int state;
+
+	do {
+		scanf_s("%d", &state);
+		getchar();
+	} while ((state < 0) || (state > 6));
+
+	return state;
 }
 
 void printActions() {
 	system("cls");
-	printf("Possible actions: \n1 - Add item\n2 - Delete item\n3 - Find item\n4 - Edit item\n5 - Show all items from beginning\n6 - Show all items from end\n0 - Exit\n");
+	printf("Possible actions: \n1 - Add item\n2 - Delete item\n3 - Find item\n4 - Show\n0 - Exit\n");
 	return;
 }
 
