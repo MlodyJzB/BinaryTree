@@ -1,3 +1,12 @@
+/*
+ * Author: Jakub Cimochowski
+ * Purpose: Implementation of binary tree,
+ *			Each node contains only one float value,
+ *			Inorder traversal, ascending order,
+ *			Basic menu in main function to conduct operations on List
+ * Language:  C
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -41,6 +50,8 @@ int main() {
 	struct Node* foundParP = NULL;
 	
 	while (1) {
+		// menu loop based on switch to run chosen actions
+
 		printActions();
 		printf("\nChoose action: ");
 
@@ -76,7 +87,9 @@ int main() {
 			float num;
 			printf("Provide float to find: ");
 			scanf_s("%f", &num);
+
 			foundP = find(num, &foundParP, rootP);
+
 			if (!foundP) {
 				printf("\nFloat not found!\n");
 				_getch();
@@ -120,12 +133,18 @@ int getState() {
 
 void printActions() {
 	system("cls");
-	printf("Possible actions: \n1 - Add item\n2 - Delete item\n3 - Find item\n4 - Show\n0 - Exit\n");
+	printf("Possible actions: \n"
+			"1 - Add item\n"
+			"2 - Delete item\n"
+			"3 - Find item\n"
+			"4 - Show\n"
+			"0 - Exit\n");
 	return;
 }
 
 void initN(float num, struct Node* nP) {
 	// init new node with a given value
+
 	nP->num = num;
 	nP->left = NULL;
 	nP->right = NULL;
@@ -134,6 +153,7 @@ void initN(float num, struct Node* nP) {
 
 void ascendAdd(struct Node* toAddP, struct Node** rootPP) {
 	// add new node to the tree; keep ascending order
+
 	if (!(*rootPP)) {
 		*rootPP = toAddP;
 	}
@@ -152,6 +172,7 @@ void ascendAdd(struct Node* toAddP, struct Node** rootPP) {
 
 struct Node* ascendPosPar(struct Node* toAddP, struct Node* startP) {
 	// give parent for a new node according to ascending order
+
 	struct Node* curP = startP;
 	struct Node* prevCurP = startP;
 
@@ -181,6 +202,7 @@ void inorderPrint(struct Node* rootP) {
 
 struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) {
 	// find fisrt node with given float value; inorder search
+
 	if ((!rootP)||(rootP->num == toFind)) {
 		return rootP;
 	}
@@ -191,7 +213,10 @@ struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) 
 	struct Node* foundP = NULL;
 	foundP = find(toFind, parentDestPP, rootP->left);
 	if (!foundP) {
-		*parentDestPP = rootP;
+		*parentDestPP = rootP; /*
+								* setting parentDestPP to rootP again 
+								* instead of keeping this value equal to rootP->left
+								*/
 		foundP = find(toFind, parentDestPP, rootP->right);
 	}
 
@@ -199,7 +224,8 @@ struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) 
 }
 
 void delete(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
-	// delete given node
+	// delete given node with keeping ascending order by replacing deleted node
+
 	keepOrder(toDelP, parentP, rootPP);
 	free(toDelP);
 
@@ -207,13 +233,14 @@ void delete(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
 }
 
 void keepOrder(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
-	// place other node to deleted node position with keeping ascending order
+	// place other node to deleted node position to keep ascending order
+
 	struct Node* repParentP;
 	struct Node* repP = findRep(toDelP, &repParentP);
 
-	repParentP->left = NULL;
+	repParentP->left = NULL; // deleting old position
 
-	if (!parentP) {
+	if (!parentP) { // if root is deleted
 		*rootPP = repP;
 	}
 	else if (parentP->left == toDelP) {
@@ -223,6 +250,7 @@ void keepOrder(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) 
 		parentP->right = repP;
 	}
 
+	// update child nodes
 	if (repP) {
 		if ((!repP->left) && (toDelP->left != repP)) {
 			repP->left = toDelP->left;
@@ -242,6 +270,8 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 	struct Node* parentP = toReplaceP;
 	
 	if ((toReplaceP->right) && (toReplaceP->left)) {
+		// looking for the first greater node than deleted one
+
 		replacementP = toReplaceP->right;
 		while (replacementP->left) {
 			parentP = replacementP;
@@ -250,11 +280,9 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 	}
 	else if ((toReplaceP->right) && !(toReplaceP->left)) {
 		replacementP = toReplaceP->right;
-		parentP = toReplaceP;
 	}
 	else if (!(toReplaceP->right) && (toReplaceP->left)) {
 		replacementP = toReplaceP->left;
-		parentP = toReplaceP;
 	}
 	*repParentDestPP = parentP;
 
