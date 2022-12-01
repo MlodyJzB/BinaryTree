@@ -17,11 +17,15 @@
 #define DEL 2
 #define FIND 3
 #define DISP 4
+#define HEIGHT 5
 #define EXIT 0
 
-// True and false
+// defines for True and false
 #define TRUE 1
 #define FALSE 0
+
+// tree height define
+#define EMPTY -1
 
 struct Node {
 	float num;
@@ -52,6 +56,8 @@ void deleteN(struct Node* toDelP, struct Node* parentP, struct Node** rootPP);
 void keepOrder(struct Node* toRepP, struct Node* parentP, struct Node** rootPP);
 
 struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP);
+
+int height(struct Node* rootP);
 
 int main() {
 	struct Node* rootP = NULL;
@@ -129,6 +135,18 @@ int main() {
 			break;
 		}
 
+		case HEIGHT: {
+			int h= height(rootP);
+			if (h == EMPTY) {
+				printf("Tree is empty!");
+			}
+			else {
+				printf("Height: %d", h);
+			}
+			_getch();
+			break;
+		}
+
 		default: {
 			printf("Incorrect action!\n");
 			_getch();
@@ -146,7 +164,7 @@ int getState() {
 	do {
 		scanf_s("%d", &state);
 		getchar();
-	} while ((state < 0) || (state > 4));
+	} while ((state < 0) || (state > 5));
 
 	return state;
 }
@@ -157,7 +175,8 @@ void printActions() {
 			"1 - Add item\n"
 			"2 - Delete item\n"
 			"3 - Find item\n"
-			"4 - Show\n"
+			"4 - Inorder print \n"
+			"4 - Print height\n"
 			"0 - Exit\n");
 	return;
 }
@@ -333,5 +352,16 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 	*repParentDestPP = parentP;
 
 	return replacementP;
+}
+
+int height(struct Node* rootP) {
+	// calculate height of tree, if empty return -1
+
+	if (!rootP) {
+		return -1;
+	}
+	int leftHeight = height(rootP->left) + 1;
+	int rightHeight = height(rootP->right) + 1;
+	return max(leftHeight, rightHeight);
 }
 
