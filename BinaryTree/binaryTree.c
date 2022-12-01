@@ -33,6 +33,10 @@ int getState();
 
 void printActions();
 
+int confirmDel(float toDel);
+
+void getLine(char* line, size_t lineSize);
+
 void initN(float num, struct Node* nP);
 
 void ascendAdd(struct Node* toAddP, struct Node** rootPP);
@@ -48,10 +52,6 @@ void deleteN(struct Node* toDelP, struct Node* parentP, struct Node** rootPP);
 void keepOrder(struct Node* toRepP, struct Node* parentP, struct Node** rootPP);
 
 struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP);
-
-int confirmDel(float toDel);
-
-void getLine(char* line, size_t lineSize);
 
 int main() {
 	struct Node* rootP = NULL;
@@ -160,6 +160,32 @@ void printActions() {
 			"4 - Show\n"
 			"0 - Exit\n");
 	return;
+}
+
+int confirmDel(float toDel) {
+	// get answer if user is sure about node deletion
+
+	printf("Are you sure you want to delete %.3f? [y/N]", toDel);
+	char line[3]; // size for ans char, endl and null char
+	char ans;
+	do {
+		getLine(line, sizeof(line));
+		ans = tolower(line[0]); // tolower for easier comparison
+		if ((ans == '\n') || (ans == 'n')) {
+			return FALSE;
+		}
+		if (ans == 'y') {
+			return TRUE;
+		}
+	} while (1);
+}
+
+void getLine(char* line, size_t lineSize) {
+	// get text line
+	if (fgets(line, lineSize, stdin) == NULL) {
+		printf("Input error.\n");
+		exit(1);
+	}
 }
 
 void initN(float num, struct Node* nP) {
@@ -309,28 +335,3 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 	return replacementP;
 }
 
-int confirmDel(float toDel) {
-	// get answer if user is sure about node deletion
-
-	printf("Are you sure you want to delete %.3f? [y/N]", toDel);
-	char line[3]; // size for ans char, endl and null char
-	char ans;
-	do {
-		getLine(line, sizeof(line));
-		ans = tolower(line[0]); // tolower for easier comparison
-		if ((ans == '\n') || (ans == 'n')) {
-			return FALSE;
-		}
-		if (ans == 'y') {
-			return TRUE;
-		}
-	} while (1);
-}
-
-void getLine(char* line, size_t lineSize) {
-	// get text line
-	if (fgets(line, lineSize, stdin) == NULL) {
-		printf("Input error.\n");
-		exit(1);
-	}
-}
