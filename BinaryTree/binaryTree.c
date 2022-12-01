@@ -317,7 +317,7 @@ int confirmDel(float toDel) {
 	char ans;
 	do {
 		getLine(line, sizeof(line));
-		ans = tolower(line[0]);
+		ans = tolower(line[0]); // tolower for easier comparison
 		if ((ans == '\n') || (ans == 'n')) {
 			return FALSE;
 		}
