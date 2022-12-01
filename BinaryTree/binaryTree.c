@@ -165,7 +165,7 @@ void printActions() {
 int confirmDel(float toDel) {
 	// get answer if user is sure about node deletion
 
-	printf("Are you sure you want to delete %.3f? [y/N]", toDel);
+	printf("Are you sure you want to delete %.3f? [y/N]: ", toDel);
 	char line[3]; // size for ans char, endl and null char
 	char ans;
 	do {
@@ -281,28 +281,28 @@ void deleteN(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
 void keepOrder(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
 	// place other node to deleted node position to keep ascending order
 
-	struct Node* repParentP;
-	struct Node* repP = findRep(toDelP, &repParentP);
+	struct Node* replacementParentP;
+	struct Node* replacementP = findRep(toDelP, &replacementParentP);
 
-	repParentP->left = NULL; // deleting old position
+	replacementParentP->left = NULL; // deleting old position
 
 	if (!parentP) { // if root is deleted
-		*rootPP = repP;
+		*rootPP = replacementP;
 	}
 	else if (parentP->left == toDelP) {
-		parentP->left = repP;
+		parentP->left = replacementP;
 	}
 	else {
-		parentP->right = repP;
+		parentP->right = replacementP;
 	}
 
 	// update child nodes
-	if (repP) {
-		if ((!repP->left) && (toDelP->left != repP)) {
-			repP->left = toDelP->left;
+	if (replacementP) {
+		if ((!replacementP->left) && (toDelP->left != replacementP)) {
+			replacementP->left = toDelP->left;
 		}
-		if ((!repP->right) && (toDelP->right != repP)) {
-			repP->right = toDelP->right;
+		if ((!replacementP->right) && (toDelP->right != replacementP)) {
+			replacementP->right = toDelP->right;
 		}
 	}
 
