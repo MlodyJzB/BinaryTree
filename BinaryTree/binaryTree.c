@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <ctype.h>
 
 // defines for actions
 #define ADD 1
@@ -17,6 +18,10 @@
 #define FIND 3
 #define DISP 4
 #define EXIT 0
+
+// True and false
+#define TRUE 1
+#define FALSE 0
 
 struct Node {
 	float num;
@@ -38,11 +43,15 @@ void inorderPrint(struct Node* rootP);
 
 struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP);
 
-void delete(struct Node** toDelPP, struct Node** rootPP);
+void deleteN(struct Node* toDelP, struct Node* parentP, struct Node** rootPP);
 
 void keepOrder(struct Node* toRepP, struct Node* parentP, struct Node** rootPP);
 
 struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP);
+
+int confirmDel(float toDel);
+
+void getLine(char* line, size_t lineSize);
 
 int main() {
 	struct Node* rootP = NULL;
@@ -72,9 +81,17 @@ int main() {
 
 		case DEL: {
 			if (foundP) {
-				delete(foundP, foundParP, &rootP);
-				foundP = NULL;
-				foundParP = NULL;
+				int conf = confirmDel(foundP->num);
+				if (conf==TRUE) {
+					printf("\n%.3f deleted.\n", foundP->num);
+					deleteN(foundP, foundParP, &rootP);
+					foundP = NULL;
+					foundParP = NULL;
+				}
+				else {
+					printf("\n%.3f was not deleted.\n", foundP->num);
+				}
+				_getch();
 			}
 			else {
 				printf("\nProvide float to delete!\n");
@@ -92,8 +109,11 @@ int main() {
 
 			if (!foundP) {
 				printf("\nFloat not found!\n");
-				_getch();
 			}
+			else {
+				printf("\nFloat found.\n");
+			}
+			_getch();
 			break;
 		}
 
@@ -126,7 +146,7 @@ int getState() {
 	do {
 		scanf_s("%d", &state);
 		getchar();
-	} while ((state < 0) || (state > 6));
+	} while ((state < 0) || (state > 4));
 
 	return state;
 }
@@ -223,7 +243,7 @@ struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) 
 	return foundP;
 }
 
-void delete(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
+void deleteN(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
 	// delete given node with keeping ascending order by replacing deleted node
 
 	keepOrder(toDelP, parentP, rootPP);
@@ -287,4 +307,30 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 	*repParentDestPP = parentP;
 
 	return replacementP;
+}
+
+int confirmDel(float toDel) {
+	// get answer if user is sure about node deletion
+
+	printf("Are you sure you want to delete %.3f? [y/N]", toDel);
+	char line[3]; // size for ans char, endl and null char
+	char ans;
+	do {
+		getLine(line, sizeof(line));
+		ans = tolower(line[0]);
+		if ((ans == '\n') || (ans == 'n')) {
+			return FALSE;
+		}
+		if (ans == 'y') {
+			return TRUE;
+		}
+	} while (1);
+}
+
+void getLine(char* line, size_t lineSize) {
+	// get text line
+	if (fgets(line, lineSize, stdin) == NULL) {
+		printf("Input error.\n");
+		exit(1);
+	}
 }
