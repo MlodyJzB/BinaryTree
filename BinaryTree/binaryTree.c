@@ -376,10 +376,14 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 }
 
 int hasOnlyRChild(struct Node* n) {
+	// check if node has only right child
+
 	return n->right && !n->left;
 }
 
 int hasOnlyLChild(struct Node* n) {
+	// check if node has only left child
+
 	return !n->right && n->left;
 }
 
@@ -415,5 +419,7 @@ int isBalanced(struct Node* startNodeP) {
 }
 
 int hasChild(struct Node* n) {
+	// check if node has child
+
 	return ((n->left) || (n->right));
 }
