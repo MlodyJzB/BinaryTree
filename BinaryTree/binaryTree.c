@@ -445,21 +445,22 @@ int hasChild(struct Node* n) {
 	return ((n->left) || (n->right));
 }
 
-int heightAndBalanceCheck(int* isBalancedDest, struct Node* startNodeP) {
+int heightAndBalanceCheck(int* isBalancedDestP, struct Node* startNodeP) {
 	// calculate height of tree, if empty return -1
+	// check if tree is balanced and write the answer to isBalancedDest
 
 	if (!startNodeP) {
 		return -1;
 	}
-	int leftHeight = heightAndBalanceCheck(isBalancedDest, startNodeP->left) + 1;
-	int rightHeight = heightAndBalanceCheck(isBalancedDest, startNodeP->right) + 1;
+	int leftHeight = heightAndBalanceCheck(isBalancedDestP, startNodeP->left) + 1;
+	int rightHeight = heightAndBalanceCheck(isBalancedDestP, startNodeP->right) + 1;
 
-	if (*isBalancedDest != FALSE) {
+	if (*isBalancedDestP != FALSE) {
 		if (abs(leftHeight - rightHeight) < 2) {
-			*isBalancedDest = TRUE;
+			*isBalancedDestP = TRUE;
 		}
 		else {
-			*isBalancedDest = FALSE;
+			*isBalancedDestP = FALSE;
 		}
 	}
 	return max(leftHeight, rightHeight);
