@@ -18,6 +18,7 @@
 #define FIND 3
 #define DISP 4
 #define HEIGHT 5
+#define ISBALANCED 6
 #define EXIT 0
 
 // defines for True and false
@@ -136,12 +137,27 @@ int main() {
 		}
 
 		case HEIGHT: {
-			int h= height(rootP);
+			int h = height(rootP);
 			if (h == EMPTY) {
-				printf("Tree is empty!");
+				printf("tree is empty!\n");
 			}
 			else {
-				printf("Height: %d", h);
+				printf("height: %d\n", h);
+			}
+			_getch();
+			break;
+		}
+
+		case ISBALANCED: {
+			int isBal = isBalanced(rootP);
+			if (isBal == EMPTY) {
+				printf("Tree is empty!\n");
+			}
+			if (isBal == TRUE) {
+				printf("Tree is balanced.\n");
+			}
+			if (isBal == FALSE) {
+				printf("Tree is not balanced.\n");
 			}
 			_getch();
 			break;
@@ -164,7 +180,7 @@ int getState() {
 	do {
 		scanf_s("%d", &state);
 		getchar();
-	} while ((state < 0) || (state > 5));
+	} while ((state < 0) || (state > 6));
 
 	return state;
 }
@@ -176,7 +192,8 @@ void printActions() {
 			"2 - Delete item\n"
 			"3 - Find item\n"
 			"4 - Inorder print \n"
-			"4 - Print height\n"
+			"5 - Print height\n"
+			"6 - Balance check\n"
 			"0 - Exit\n");
 	return;
 }
@@ -354,14 +371,37 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 	return replacementP;
 }
 
-int height(struct Node* rootP) {
+int height(struct Node* startNodeP) {
 	// calculate height of tree, if empty return -1
 
-	if (!rootP) {
+	if (!startNodeP) {
 		return -1;
 	}
-	int leftHeight = height(rootP->left) + 1;
-	int rightHeight = height(rootP->right) + 1;
+	int leftHeight = height(startNodeP->left) + 1;
+	int rightHeight = height(startNodeP->right) + 1;
+	
 	return max(leftHeight, rightHeight);
 }
 
+int isBalanced(struct Node* startNodeP) {
+	// calculate height of tree, if empty return -1
+
+	if ((startNodeP->left) && (startNodeP->right)) {
+		int isLeftBalanced = isBalanced(startNodeP->left);
+		int isRightBalanced = isBalanced(startNodeP->right);
+		return isLeftBalanced&&isRightBalanced;
+	}
+	else if ((!startNodeP->left)&&(startNodeP->right)) {
+		return !hasChild(startNodeP->right);
+	}
+	else if ((startNodeP->left) && (!startNodeP->right)) {
+		return !hasChild(startNodeP->left);
+	}
+	else {
+		return TRUE;
+	}
+}
+
+int hasChild(struct Node* n) {
+	return ((n->left) || (n->right));
+}
