@@ -58,6 +58,10 @@ void keepOrder(struct Node* toRepP, struct Node* parentP, struct Node** rootPP);
 
 struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP);
 
+int hasOnlyRChild(struct Node* n);
+
+int hasOnlyLChild(struct Node* n);
+
 int height(struct Node* rootP);
 
 int main() {
@@ -360,15 +364,23 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 			replacementP = replacementP->left;
 		}
 	}
-	else if ((toReplaceP->right) && !(toReplaceP->left)) {
+	else if (hasOnlyRChild(toReplaceP)) {
 		replacementP = toReplaceP->right;
 	}
-	else if (!(toReplaceP->right) && (toReplaceP->left)) {
+	else if (hasOnlyLChild(toReplaceP)) {
 		replacementP = toReplaceP->left;
 	}
 	*repParentDestPP = parentP;
 
 	return replacementP;
+}
+
+int hasOnlyRChild(struct Node* n) {
+	return n->right && !n->left;
+}
+
+int hasOnlyLChild(struct Node* n) {
+	return !n->right && n->left;
 }
 
 int height(struct Node* startNodeP) {
@@ -391,10 +403,10 @@ int isBalanced(struct Node* startNodeP) {
 		int isRightBalanced = isBalanced(startNodeP->right);
 		return isLeftBalanced&&isRightBalanced;
 	}
-	else if ((!startNodeP->left)&&(startNodeP->right)) {
+	else if (hasOnlyRChild(startNodeP)) {
 		return !hasChild(startNodeP->right);
 	}
-	else if ((startNodeP->left) && (!startNodeP->right)) {
+	else if (hasOnlyLChild(startNodeP)) {
 		return !hasChild(startNodeP->left);
 	}
 	else {
