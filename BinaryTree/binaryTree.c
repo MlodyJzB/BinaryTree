@@ -455,7 +455,7 @@ int heightAndBalanceCheck(int* isBalancedDest, struct Node* startNodeP) {
 	int rightHeight = heightAndBalanceCheck(isBalancedDest, startNodeP->right) + 1;
 
 	if (*isBalancedDest != FALSE) {
-		if (abs(leftHeight - rightHeight < 2)) {
+		if (abs(leftHeight - rightHeight) < 2) {
 			*isBalancedDest = TRUE;
 		}
 		else {
