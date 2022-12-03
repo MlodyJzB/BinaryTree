@@ -19,6 +19,7 @@
 #define DISP 4
 #define HEIGHT 5
 #define ISBALANCED 6
+#define HEIGHTANDBALANCED 7
 #define EXIT 0
 
 // defines for True and false
@@ -143,10 +144,10 @@ int main() {
 		case HEIGHT: {
 			int h = height(rootP);
 			if (h == EMPTY) {
-				printf("tree is empty!\n");
+				printf("Tree is empty!\n");
 			}
 			else {
-				printf("height: %d\n", h);
+				printf("Height: %d\n", h);
 			}
 			_getch();
 			break;
@@ -162,6 +163,25 @@ int main() {
 			}
 			if (isBal == FALSE) {
 				printf("Tree is not balanced.\n");
+			}
+			_getch();
+			break;
+		}
+
+		case HEIGHTANDBALANCED: {
+			int isBal = TRUE;
+			int height = heightAndBalanceCheck(&isBal, rootP);
+			if (height == EMPTY) {
+				printf("Tree is empty!\n");
+			}
+			else {
+				printf("Height: %d\n", height);
+				if (isBal == TRUE) {
+					printf("Tree is balanced.\n");
+				}
+				else {
+					printf("Tree is not balanced.\n");
+				}
 			}
 			_getch();
 			break;
@@ -184,7 +204,7 @@ int getState() {
 	do {
 		scanf_s("%d", &state);
 		getchar();
-	} while ((state < 0) || (state > 6));
+	} while ((state < 0) || (state > 7));
 
 	return state;
 }
@@ -198,6 +218,7 @@ void printActions() {
 			"4 - Inorder print \n"
 			"5 - Print height\n"
 			"6 - Balance check\n"
+			"7 - Height and balance check\n"
 			"0 - Exit\n");
 	return;
 }
@@ -422,4 +443,24 @@ int hasChild(struct Node* n) {
 	// check if node has child
 
 	return ((n->left) || (n->right));
+}
+
+int heightAndBalanceCheck(int* isBalancedDest, struct Node* startNodeP) {
+	// calculate height of tree, if empty return -1
+
+	if (!startNodeP) {
+		return -1;
+	}
+	int leftHeight = heightAndBalanceCheck(isBalancedDest, startNodeP->left) + 1;
+	int rightHeight = heightAndBalanceCheck(isBalancedDest, startNodeP->right) + 1;
+
+	if (*isBalancedDest != FALSE) {
+		if (abs(leftHeight - rightHeight < 2)) {
+			*isBalancedDest = TRUE;
+		}
+		else {
+			*isBalancedDest = FALSE;
+		}
+	}
+	return max(leftHeight, rightHeight);
 }
