@@ -18,8 +18,7 @@
 #define FIND 3
 #define DISP 4
 #define HEIGHT 5
-#define ISBALANCED 6
-#define HEIGHTANDBALANCED 7
+#define HEIGHTANDBALANCED 6
 #define EXIT 0
 
 // defines for True and false
@@ -65,10 +64,13 @@ int hasOnlyLChild(struct Node* n);
 
 int height(struct Node* rootP);
 
+void treeToArr(float* arr, int* indexDestP, struct Node* rootP);
+
 int main() {
 	struct Node* rootP = NULL;
 	struct Node* foundP = NULL;
 	struct Node* foundParP = NULL;
+	int treeSize = 0;
 	
 	while (1) {
 		// menu loop based on switch to run chosen actions
@@ -88,6 +90,8 @@ int main() {
 			initN(num, toAddP);
 
 			ascendAdd(toAddP, &rootP);
+			treeSize++;
+
 			break;
 		}
 
@@ -99,6 +103,7 @@ int main() {
 					deleteN(foundP, foundParP, &rootP);
 					foundP = NULL;
 					foundParP = NULL;
+					treeSize--;
 				}
 				else {
 					printf("\n%.3f was not deleted.\n", foundP->num);
@@ -153,21 +158,6 @@ int main() {
 			break;
 		}
 
-		case ISBALANCED: {
-			int isBal = isBalanced(rootP);
-			if (isBal == EMPTY) {
-				printf("Tree is empty!\n");
-			}
-			if (isBal == TRUE) {
-				printf("Tree is balanced.\n");
-			}
-			if (isBal == FALSE) {
-				printf("Tree is not balanced.\n");
-			}
-			_getch();
-			break;
-		}
-
 		case HEIGHTANDBALANCED: {
 			int isBal = TRUE;
 			int height = heightAndBalanceCheck(&isBal, rootP);
@@ -217,8 +207,7 @@ void printActions() {
 			"3 - Find item\n"
 			"4 - Inorder print \n"
 			"5 - Print height\n"
-			"6 - Balance check\n"
-			"7 - Height and balance check\n"
+			"6 - Height and balance check\n"
 			"0 - Exit\n");
 	return;
 }
@@ -439,4 +428,16 @@ int heightAndBalanceCheck(int* isBalancedDestP, struct Node* startNodeP) {
 		}
 	}
 	return max(leftHeight, rightHeight);
+}
+
+void treeToArr(float* arr, int* indexDestP, struct Node* rootP) {
+	if (!rootP) {
+		return;
+	}
+	
+	treeToArr(arr, indexDestP, rootP->left);
+	arr[(*indexDestP)++] = rootP->num;
+	treeToArr(arr, indexDestP, rootP->right);
+
+	return;
 }
