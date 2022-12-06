@@ -430,13 +430,13 @@ int heightAndBalanceCheck(int* isBalancedDestP, struct Node* startNodeP) {
 	return max(leftHeight, rightHeight);
 }
 
-void treeToArr(float* arr, int* indexDestP, struct Node* rootP) {
+void treeToArr(struct Node** arr, int* indexDestP, struct Node* rootP) {
 	if (!rootP) {
 		return;
 	}
 	
 	treeToArr(arr, indexDestP, rootP->left);
-	arr[(*indexDestP)++] = rootP->num;
+	arr[(*indexDestP)++] = rootP;
 	treeToArr(arr, indexDestP, rootP->right);
 
 	return;
