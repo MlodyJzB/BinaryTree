@@ -503,7 +503,7 @@ void arrToBalancedTree(struct Node** arr, int startI, int endI, struct Node** ro
 	 * create two subarrays and work in recursive way
 	 */
 
-	if (startI > endI) {
+	if (startI > endI) { // end of array 
 		*rootPP = NULL;
 		return;
 	}
@@ -511,8 +511,8 @@ void arrToBalancedTree(struct Node** arr, int startI, int endI, struct Node** ro
 	int mid = (startI + endI) / 2;
 	*rootPP = arr[mid];
 
-	arrToBalancedTree(arr, startI, mid-1, &((*rootPP)->left));
-	arrToBalancedTree(arr, mid+1, endI, &((*rootPP)->right));
+	arrToBalancedTree(arr, startI, mid-1, &((*rootPP)->left)); // left subarray, left child
+	arrToBalancedTree(arr, mid+1, endI, &((*rootPP)->right)); // right subarray, right child
 
 	return;
 }
