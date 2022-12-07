@@ -64,7 +64,9 @@ int hasOnlyLChild(struct Node* n);
 
 int height(struct Node* rootP);
 
-void treeToArr(float* arr, int* indexDestP, struct Node* rootP);
+void treeToArr(struct Node** arr, int* indexDestP, struct Node* rootP);
+
+void arrToBalancedTree(struct Node** arr, int startI, int endI, struct Node** rootPP);
 
 int main() {
 	struct Node* rootP = NULL;
@@ -438,6 +440,20 @@ void treeToArr(struct Node** arr, int* indexDestP, struct Node* rootP) {
 	treeToArr(arr, indexDestP, rootP->left);
 	arr[(*indexDestP)++] = rootP;
 	treeToArr(arr, indexDestP, rootP->right);
+
+	return;
+}
+
+void arrToBalancedTree(struct Node** arr, int startI, int endI, struct Node** rootPP) {
+	if (startI > endI) {
+		*rootPP = NULL;
+		return;
+	}
+	int mid = (startI + endI) / 2;
+	*rootPP = arr[mid];
+
+	arrToBalancedTree(arr, startI, mid-1, &((*rootPP)->left));
+	arrToBalancedTree(arr, mid+1, endI, &((*rootPP)->right));
 
 	return;
 }
