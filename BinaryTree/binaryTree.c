@@ -19,6 +19,7 @@
 #define DISP 4
 #define HEIGHT 5
 #define HEIGHTANDBALANCED 6
+#define BALANCE 7
 #define EXIT 0
 
 // defines for True and false
@@ -63,6 +64,8 @@ int hasOnlyRChild(struct Node* n);
 int hasOnlyLChild(struct Node* n);
 
 int height(struct Node* rootP);
+
+void balance(int treeSize, struct Node** rootPP);
 
 void treeToArr(struct Node** arr, int* indexDestP, struct Node* rootP);
 
@@ -179,6 +182,11 @@ int main() {
 			break;
 		}
 
+		case BALANCE: {
+			balance(treeSize, &rootP);
+			break;
+		}
+
 		default: {
 			printf("Incorrect action!\n");
 			_getch();
@@ -215,7 +223,7 @@ void printActions() {
 }
 
 int confirmDel(float toDel) {
-	// get answer if user is sure about node deletion
+	// Purpose: get answer if user is sure about node deletion
 
 	printf("Are you sure you want to delete %.3f? [y/N]: ", toDel);
 	char line[3]; // size for ans char, endl and null char
@@ -233,7 +241,7 @@ int confirmDel(float toDel) {
 }
 
 void getLine(char* line, size_t lineSize) {
-	// get text line
+	// Purpose: get text line
 	if (fgets(line, lineSize, stdin) == NULL) {
 		printf("Input error.\n");
 		exit(1);
@@ -241,7 +249,7 @@ void getLine(char* line, size_t lineSize) {
 }
 
 void initN(float num, struct Node* nP) {
-	// init new node with a given value
+	// Purpose: init new node with a given value
 
 	nP->num = num;
 	nP->left = NULL;
@@ -250,7 +258,7 @@ void initN(float num, struct Node* nP) {
 }
 
 void ascendAdd(struct Node* toAddP, struct Node** rootPP) {
-	// add new node to the tree; keep ascending order
+	// Purpose: add new node to the tree; keep ascending order
 
 	if (!(*rootPP)) {
 		*rootPP = toAddP;
@@ -269,7 +277,7 @@ void ascendAdd(struct Node* toAddP, struct Node** rootPP) {
 }
 
 struct Node* ascendPosPar(struct Node* toAddP, struct Node* startP) {
-	// give parent for a new node according to ascending order
+	// Purpose: give parent for new node according to ascending order
 
 	struct Node* curP = startP;
 	struct Node* prevCurP = startP;
@@ -299,7 +307,10 @@ void inorderPrint(struct Node* rootP) {
 }
 
 struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) {
-	// find fisrt node with given float value; inorder search
+	/* Purpose: find fisrt node with given float value
+	* 
+	* inorder search
+	*/
 
 	if ((!rootP)||(rootP->num == toFind)) {
 		return rootP;
@@ -322,7 +333,10 @@ struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) 
 }
 
 void deleteN(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
-	// delete given node with keeping ascending order by replacing deleted node
+	/* Purpose: delete given node
+	 * 
+	 * with keeping ascending order by replacing deleted node
+	 */ 
 
 	keepOrder(toDelP, parentP, rootPP);
 	free(toDelP);
@@ -331,7 +345,10 @@ void deleteN(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
 }
 
 void keepOrder(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) {
-	// place other node to deleted node position to keep ascending order
+	/* Purpose: place other node to deleted node position
+	 *
+	 * keep ascending order
+	 */
 
 	struct Node* replacementParentP;
 	struct Node* replacementP = findRep(toDelP, &replacementParentP);
@@ -362,7 +379,7 @@ void keepOrder(struct Node* toDelP, struct Node* parentP, struct Node** rootPP) 
 }
 
 struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
-	 // search for the replacement of the deleted node to mantain order
+	 // Purpose: search for the replacement of the deleted node to mantain order
 	
 	struct Node* replacementP = NULL;
 	struct Node* parentP = toReplaceP;
@@ -388,19 +405,22 @@ struct Node* findRep(struct Node* toReplaceP, struct Node** repParentDestPP) {
 }
 
 int hasOnlyRChild(struct Node* n) {
-	// check if node has only right child
+	// Purpose: check if node has only right child
 
 	return n->right && !n->left;
 }
 
 int hasOnlyLChild(struct Node* n) {
-	// check if node has only left child
+	// Purpose: check if node has only left child
 
 	return !n->right && n->left;
 }
 
 int height(struct Node* startNodeP) {
-	// calculate height of tree, if empty return -1
+	/* Purpose: calculate height of tree,
+	 * 
+	 * if empty return -1
+	 */
 
 	if (!startNodeP) {
 		return -1;
@@ -412,8 +432,11 @@ int height(struct Node* startNodeP) {
 }
 
 int heightAndBalanceCheck(int* isBalancedDestP, struct Node* startNodeP) {
-	// calculate height of tree, if empty return -1
-	// check if tree is balanced and write the answer to isBalancedDest
+	/* Purpose: calculate height of tree
+	 *
+	 * check if tree is balanced and write the answer to isBalancedDest
+	 * if empty return -1
+	 */
 
 	if (!startNodeP) {
 		return -1;
@@ -432,7 +455,28 @@ int heightAndBalanceCheck(int* isBalancedDestP, struct Node* startNodeP) {
 	return max(leftHeight, rightHeight);
 }
 
+void balance(int treeSize, struct Node** rootPP) {
+	/* Purpose: balance a tree
+	 *
+	 * first put it to array and then remake a tree from array
+	 * balanced treeas a result
+	 */
+
+	int index = 0;
+	struct Node** pointerArr = (struct Node**)malloc(treeSize * sizeof(struct Node*));
+
+	treeToArr(pointerArr, &index, *rootPP);
+	arrToBalancedTree(pointerArr, 0, treeSize - 1, rootPP);
+		
+	return;
+}
+
 void treeToArr(struct Node** arr, int* indexDestP, struct Node* rootP) {
+	/* Purpose: put tree node pointers into the array
+	 * 
+	 * ascending order
+	 */
+
 	if (!rootP) {
 		return;
 	}
@@ -445,10 +489,17 @@ void treeToArr(struct Node** arr, int* indexDestP, struct Node* rootP) {
 }
 
 void arrToBalancedTree(struct Node** arr, int startI, int endI, struct Node** rootPP) {
+	/* Purpose: create tree from array of node pointers
+	 *
+	 * take node from mid of array as new node
+	 * create two subarrays and work in recursive way
+	 */
+
 	if (startI > endI) {
 		*rootPP = NULL;
 		return;
 	}
+
 	int mid = (startI + endI) / 2;
 	*rootPP = arr[mid];
 
