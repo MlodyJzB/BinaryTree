@@ -467,7 +467,7 @@ void balance(int treeSize, struct Node** rootPP) {
 	/* Purpose: balance a tree
 	 *
 	 * first put it to array and then remake a tree from array
-	 * balanced treeas a result
+	 * balanced tree as a result
 	 */
 
 	int index = 0;
