@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <ctype.h>
+#include <math.h>
 
 // defines for actions
 #define ADD 1
@@ -18,8 +19,9 @@
 #define FIND 3
 #define DISP 4
 #define HEIGHT 5
-#define HEIGHTANDBALANCED 6
-#define BALANCE 7
+#define ISBALANCED 6
+#define HEIGHTANDBALANCED 7
+#define BALANCE 8
 #define EXIT 0
 
 // defines for True and false
@@ -161,6 +163,20 @@ int main() {
 			break;
 		}
 
+		case ISBALANCED: {
+			if (treeSize == 0) {
+				printf("Tree is empty");
+			}
+			else if (isBalanced(treeSize, rootP)) {
+				printf("Tree is balanced.");
+			}
+			else {
+				printf("Tree is not balanced.");
+			}
+			_getch();
+			break;
+		}
+
 		case HEIGHTANDBALANCED: {
 			int isBal = TRUE;
 			int height = heightAndBalanceCheck(&isBal, rootP);
@@ -182,7 +198,7 @@ int main() {
 
 		case BALANCE: {
 			balance(treeSize, &rootP);
-			printf("Tree is balanced!");
+			printf("Tree was balanced successfully!");
 			_getch();
 			break;
 		}
@@ -207,7 +223,7 @@ int getState() {
 	int state;
 
 	scanf_s("%d", &state);
-	while ((state < 0) || (state > 7)) {
+	while ((state < 0) || (state > 8)) {
 		printf("Incorrect action! Try again: ");
 		scanf_s("%d", &state);
 		getchar();
@@ -224,8 +240,9 @@ void printActions() {
 			"3 - Find item\n"
 			"4 - Inorder print \n"
 			"5 - Print height\n"
-			"6 - Height and balance check\n"
-			"7 - Balance\n"
+			"6 - Balance check\n"
+			"7 - Height and balance check\n"
+			"8 - Balance\n"
 			"0 - Exit\n");
 	return;
 }
@@ -439,10 +456,23 @@ int height(struct Node* startNodeP) {
 	return max(leftHeight, rightHeight);
 }
 
-int heightAndBalanceCheck(int* isBalancedDestP, struct Node* startNodeP) {
-	/* Purpose: calculate height of tree
+int isBalanced(int treeSize, struct Node* rootP) {
+	/* Purpose: check if tree is balanced
 	 *
-	 * check if tree is balanced and write the answer to isBalancedDest
+	 * check height of balanced tree with given size
+	 * compare to actual height
+	 */
+
+	int actualHeight = height(rootP);
+	int heightIfBalanced = floor(log(treeSize) / log(2));
+
+	return actualHeight == heightIfBalanced;
+}
+
+int heightAndBalanceCheck(int* isBalancedDestP, struct Node* startNodeP) {
+	/* Purpose: calculate height and check if tree is balanced
+	 *
+	 * write balance answer to isBalancedDest
 	 * if empty return -1
 	 */
 
