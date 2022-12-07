@@ -96,6 +96,8 @@ int main() {
 
 			ascendAdd(toAddP, &rootP);
 			treeSize++;
+			printf("\nFloat added successfully!\n");
+			_getch();
 
 			break;
 		}
@@ -140,14 +142,10 @@ int main() {
 		}
 
 		case DISP: {
+			printf("Floats: ");
 			inorderPrint(rootP);
 			printf("\n");
 			_getch();
-			break;
-		}
-
-		case EXIT: {
-			return 0;
 			break;
 		}
 
@@ -184,6 +182,13 @@ int main() {
 
 		case BALANCE: {
 			balance(treeSize, &rootP);
+			printf("Tree is balanced!");
+			_getch();
+			break;
+		}
+
+		case EXIT: {
+			return 0;
 			break;
 		}
 
@@ -201,10 +206,12 @@ int main() {
 int getState() {
 	int state;
 
-	do {
+	scanf_s("%d", &state);
+	while ((state < 0) || (state > 7)) {
+		printf("Incorrect action! Try again: ");
 		scanf_s("%d", &state);
 		getchar();
-	} while ((state < 0) || (state > 7));
+	}
 
 	return state;
 }
@@ -218,6 +225,7 @@ void printActions() {
 			"4 - Inorder print \n"
 			"5 - Print height\n"
 			"6 - Height and balance check\n"
+			"7 - Balance\n"
 			"0 - Exit\n");
 	return;
 }
