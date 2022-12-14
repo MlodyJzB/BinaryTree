@@ -1,3 +1,10 @@
+/*
+ * Author: Jakub Cimochowski
+ * Purpose: Basic menu in main function to conduct operations on List
+ *
+ * Language:  C
+ */
+
 #ifndef MENU_H
 #define MENU_H
 

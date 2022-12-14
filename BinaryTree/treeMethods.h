@@ -1,3 +1,12 @@
+/*
+ * Author: Jakub Cimochowski
+ * Purpose: Implementation of binary tree,
+ *	     Each node contains only one float value,
+ *	     Inorder traversal, ascending order
+ *
+ * Language:  C
+ */
+
 #ifndef TREEMETHODS_H
 #define TREEMETHODS_H
 
