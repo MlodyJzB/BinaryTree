@@ -200,7 +200,7 @@ int isBalanced(int treeSize, struct Node* rootP) {
 	 */
 
 	int actualHeight = height(rootP);
-	int heightIfBalanced = floor(log(treeSize) / log(2));
+	int heightIfBalanced = ceil(log(treeSize+1) / log(2));
 
 	return actualHeight == heightIfBalanced;
 }
