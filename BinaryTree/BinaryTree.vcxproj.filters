@@ -18,5 +18,13 @@
     <ClCompile Include="binaryTree.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="treeMethods.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="treeMethods.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
