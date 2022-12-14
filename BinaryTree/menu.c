@@ -173,6 +173,7 @@ int getState() {
 	int state;
 
 	scanf_s("%d", &state);
+	getchar();
 	while ((state < 0) || (state > 8)) {
 		printf("Incorrect action! Try again: ");
 		scanf_s("%d", &state);
