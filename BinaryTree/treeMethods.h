@@ -29,6 +29,10 @@ int hasOnlyLChild(struct Node* n);
 
 int height(struct Node* rootP);
 
+int isBalanced(int treeSize, struct Node* rootP);
+
+int heightAndBalanceCheck(int* isBalancedDestP, struct Node* startNodeP);
+
 void balance(int treeSize, struct Node** rootPP);
 
 void treeToArr(struct Node** arr, int* indexDestP, struct Node* rootP);

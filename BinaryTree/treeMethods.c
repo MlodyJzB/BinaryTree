@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
-#include <ctype.h>
 #include <math.h>
 #include "../BinaryTree/treeMethods.h"
 
@@ -200,7 +198,7 @@ int isBalanced(int treeSize, struct Node* rootP) {
 	 */
 
 	int actualHeight = height(rootP);
-	int heightIfBalanced = ceil(log(treeSize+1) / log(2));
+	int heightIfBalanced = (int)ceil(log(treeSize+1) / log(2));
 
 	return actualHeight == heightIfBalanced;
 }
