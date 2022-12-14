@@ -27,11 +27,11 @@ void runMenu() {
 	int treeSize = 0;
 
 	while (1) {
-		menuIteration(rootP, foundP, foundParP, &treeSize);
+		menuIteration(&rootP, &foundP, &foundParP, &treeSize);
 	}
 }
 
-void menuIteration(struct Node* rootP, struct Node* foundP, struct Node* foundParP, int* treeSizeP) {
+void menuIteration(struct Node** rootPP, struct Node** foundPP, struct Node** foundParPP, int* treeSizeP) {
 	printActions();
 	printf("\nChoose action: ");
 
@@ -46,7 +46,7 @@ void menuIteration(struct Node* rootP, struct Node* foundP, struct Node* foundPa
 		struct Node* toAddP = (struct Node*)malloc(sizeof(struct Node));
 		initN(num, toAddP);
 
-		ascendAdd(toAddP, &rootP);
+		ascendAdd(toAddP, rootPP);
 		(*treeSizeP)++;
 		printf("\nFloat added successfully!\n");
 		_getch();
@@ -55,24 +55,25 @@ void menuIteration(struct Node* rootP, struct Node* foundP, struct Node* foundPa
 	}
 
 	case DEL: {
-		if (foundP) {
-			int conf = confirmDel(foundP->num);
-			if (conf == TRUE) {
-				printf("\n%.3f deleted.\n", foundP->num);
-				deleteN(foundP, foundParP, &rootP);
-				foundP = NULL;
-				foundParP = NULL;
-				(*treeSizeP)--;
-			}
-			else {
-				printf("\n%.3f was not deleted.\n", foundP->num);
-			}
-			_getch();
-		}
-		else {
+		if (!(*foundPP)) {
 			printf("\nProvide float to delete!\n");
 			_getch();
+			break;
 		}
+
+		int conf = confirmDel((*foundPP)->num);
+		if (conf == TRUE) {
+			printf("\n%.3f deleted.\n", (*foundPP)->num);
+			deleteN(*foundPP, *foundParPP, rootPP);
+			*foundPP = NULL;
+			*foundParPP = NULL;
+			(*treeSizeP)--;
+		}
+		else {
+			printf("\n%.3f was not deleted.\n", (*foundPP)->num);
+		}
+		_getch();
+
 		break;
 	}
 
@@ -81,9 +82,9 @@ void menuIteration(struct Node* rootP, struct Node* foundP, struct Node* foundPa
 		printf("Provide float to find: ");
 		scanf_s("%f", &num);
 
-		foundP = find(num, &foundParP, rootP);
+		*foundPP = find(num, foundParPP, *rootPP);
 
-		if (!foundP) {
+		if (!(*foundPP)) {
 			printf("\nFloat not found!\n");
 		}
 		else {
@@ -95,14 +96,14 @@ void menuIteration(struct Node* rootP, struct Node* foundP, struct Node* foundPa
 
 	case DISP: {
 		printf("Floats: ");
-		inorderPrint(rootP);
+		inorderPrint(*rootPP);
 		printf("\n");
 		_getch();
 		break;
 	}
 
 	case HEIGHT: {
-		int h = height(rootP);
+		int h = height(*rootPP);
 		if (h == 0) {
 			printf("Tree is empty!\n");
 		}
@@ -117,7 +118,7 @@ void menuIteration(struct Node* rootP, struct Node* foundP, struct Node* foundPa
 		if (*treeSizeP == 0) {
 			printf("Tree is empty");
 		}
-		else if (isBalanced(*treeSizeP, rootP)) {
+		else if (isBalanced(*treeSizeP, *rootPP)) {
 			printf("Tree is balanced.");
 		}
 		else {
@@ -129,7 +130,7 @@ void menuIteration(struct Node* rootP, struct Node* foundP, struct Node* foundPa
 
 	case HEIGHTANDBALANCED: {
 		int isBal = TRUE;
-		int height = heightAndBalanceCheck(&isBal, rootP);
+		int height = heightAndBalanceCheck(&isBal, *rootPP);
 		if (height == 0) {
 			printf("Tree is empty!\n");
 		}
@@ -147,7 +148,7 @@ void menuIteration(struct Node* rootP, struct Node* foundP, struct Node* foundPa
 	}
 
 	case BALANCE: {
-		balance(*treeSizeP, &rootP);
+		balance(*treeSizeP, rootPP);
 		printf("Tree was balanced successfully!");
 		_getch();
 		break;

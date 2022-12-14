@@ -18,6 +18,6 @@ int confirmDel(float toDel);
 
 void getLine(char* line, int lineSize);
 
-void menuIteration(struct Node* rootP, struct Node* foundP, struct Node* foundParP, int* treeSizeP);
+void menuIteration(struct Node** rootPP, struct Node** foundPP, struct Node** foundParPP, int* treeSizeP);
 
 #endif /* menu.h */
