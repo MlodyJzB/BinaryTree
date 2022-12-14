@@ -1,6 +1,6 @@
 /*
  * Author: Jakub Cimochowski
- * Purpose: Basic menu in main function to conduct operations on List
+ * Purpose: Basic menu to conduct operations on List
  *
  * Language:  C
  */
