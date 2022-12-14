@@ -28,9 +28,6 @@
 #define TRUE 1
 #define FALSE 0
 
-// tree height define
-#define EMPTY -1
-
 struct Node {
 	float num;
 	struct Node* left;
@@ -153,7 +150,7 @@ int main() {
 
 		case HEIGHT: {
 			int h = height(rootP);
-			if (h == EMPTY) {
+			if (h == 0) {
 				printf("Tree is empty!\n");
 			}
 			else {
@@ -180,7 +177,7 @@ int main() {
 		case HEIGHTANDBALANCED: {
 			int isBal = TRUE;
 			int height = heightAndBalanceCheck(&isBal, rootP);
-			if (height == EMPTY) {
+			if (height == 0){
 				printf("Tree is empty!\n");
 			}
 			else {
@@ -348,9 +345,9 @@ struct Node* find(float toFind, struct Node** parentDestPP, struct Node* rootP) 
 	foundP = find(toFind, parentDestPP, rootP->left);
 	if (!foundP) {
 		*parentDestPP = rootP; /*
-								* setting parentDestPP to rootP again 
-								* instead of keeping this value equal to rootP->left
-								*/
+					   * setting parentDestPP to rootP again 
+					   * instead of keeping this value equal to rootP->left
+					   */
 		foundP = find(toFind, parentDestPP, rootP->right);
 	}
 
@@ -448,7 +445,7 @@ int height(struct Node* startNodeP) {
 	 */
 
 	if (!startNodeP) {
-		return -1;
+		return 0;
 	}
 	int leftHeight = height(startNodeP->left) + 1;
 	int rightHeight = height(startNodeP->right) + 1;
@@ -473,11 +470,10 @@ int heightAndBalanceCheck(int* isBalancedDestP, struct Node* startNodeP) {
 	/* Purpose: calculate height and check if tree is balanced
 	 *
 	 * write balance answer to isBalancedDest
-	 * if empty return -1
 	 */
 
 	if (!startNodeP) {
-		return -1;
+		return 0;
 	}
 	int leftHeight = heightAndBalanceCheck(isBalancedDestP, startNodeP->left) + 1;
 	int rightHeight = heightAndBalanceCheck(isBalancedDestP, startNodeP->right) + 1;
